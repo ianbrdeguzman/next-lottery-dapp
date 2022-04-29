@@ -1,16 +1,25 @@
+import Head from "next/head";
 import { JsonRpcSigner, Web3Provider } from "@ethersproject/providers";
 import { ethers } from "ethers";
-import type { NextPage } from "next";
-import Head from "next/head";
-import { useState } from "react";
-import styles from "../styles/index.module.css";
+import React, { ButtonHTMLAttributes, ReactHTML, useState } from "react";
 import { Lottery, Lottery__factory } from "../../web3/typechain";
+import {
+  Button,
+  IconLockClosed,
+  Stack,
+  Heading,
+  Text,
+  Box,
+  Card,
+  Tag,
+} from "degen";
+import styles from "../styles/index.module.css";
 
 declare let window: {
   ethereum: ethers.providers.ExternalProvider;
 };
 
-const Home: NextPage = () => {
+export default function Home() {
   const [provider, setProvider] = useState<Web3Provider>();
   const [contract, setContract] = useState<Lottery | null>();
   const [signer, setSigner] = useState<JsonRpcSigner>();
@@ -41,6 +50,10 @@ const Home: NextPage = () => {
     }
   };
 
+  const handleButton = (e: React.MouseEvent<HTMLButtonElement>) => {
+    console.log(e.currentTarget.textContent);
+  };
+
   const handleDisconnectWallet = () => setAddress(undefined);
 
   return (
@@ -51,18 +64,86 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <nav className={styles.nav}>
-        <h1 className={styles.title}>Next Lottery Dapp</h1>
-        <button
-          onClick={address ? handleDisconnectWallet : handleConnectWallet}
-        >
-          {address ? "Logout" : "Connect Wallet"}
-        </button>
+        <Stack direction="horizontal" justify="space-between" align="center">
+          <Heading as="h1" level="1">
+            Next Lottery Dapp
+          </Heading>
+          <Stack align="center">
+            <Button
+              prefix={!address ? <IconLockClosed /> : null}
+              variant="tertiary"
+              width={{ xs: "full", md: "max" }}
+              onClick={address ? handleDisconnectWallet : handleConnectWallet}
+            >
+              {address ? "Logout" : "Connect"}
+            </Button>
+          </Stack>
+        </Stack>
       </nav>
-      <main>
-        <p>Enter the lottery by sending 0.01 Ether</p>
+      <main className={styles.main}>
+        <section>
+          <Stack direction="horizontal" justify="space-between" wrap>
+            <Box>
+              <Card>
+                <Heading as="h3">Lottery History</Heading>
+                <Text>The quick brown fox…</Text>
+              </Card>
+            </Box>
+            <Box>
+              <Card>
+                <Heading as="h3">Players (0)</Heading>
+                <Text>The quick brown fox…</Text>
+              </Card>
+            </Box>
+            <Box>
+              <Card>
+                <Heading as="h3">Pot</Heading>
+                <Text>The quick brown fox…</Text>
+              </Card>
+            </Box>
+          </Stack>
+        </section>
+        <section className={styles.buttons}>
+          <Stack
+            direction="vertical"
+            justify="space-between"
+            align="flex-start"
+          >
+            <Card>
+              <Text>Enter the lottery by sending 0.01 Ether.</Text>
+              <Button
+                variant="secondary"
+                tone="red"
+                size="small"
+                onClick={handleButton}
+              >
+                Play Now
+              </Button>
+            </Card>
+            <Card>
+              <Text>
+                <b>Admin:</b> Pick winner
+              </Text>
+              <Button variant="secondary" size="small" onClick={handleButton}>
+                Pick Winner
+              </Button>
+            </Card>
+            <Card>
+              <Text>
+                <b>Admin:</b> Pay winner
+              </Text>
+              <Button
+                variant="secondary"
+                tone="green"
+                size="small"
+                onClick={handleButton}
+              >
+                Pay Winner
+              </Button>
+            </Card>
+          </Stack>
+        </section>
       </main>
     </div>
   );
-};
-
-export default Home;
+}
