@@ -21,9 +21,9 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "./scripts",
-    "./test",
-    "./typechain"
+    "./web3/scripts",
+    "./web3/test",
+    "./web3/typechain"
   ],
   "exclude": ["node_modules", "./hardhat.config.ts"],
   "files": ["./hardhat.config.ts"]

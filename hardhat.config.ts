@@ -42,6 +42,12 @@ const config: HardhatUserConfig = {
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY,
   },
+  paths: {
+    sources: "./web3/contracts",
+    tests: "./web3/test",
+    cache: "./web3/cache",
+    artifacts: "./web3/artifacts",
+  },
 };
 
 export default config;
