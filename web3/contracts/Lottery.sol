@@ -11,6 +11,7 @@ contract Lottery {
     address public owner;
     address payable[] public players;
     uint256 public lotteryId;
+    uint256 public randomResult;
     mapping(uint256 => address payable) public lotteryHistory;
 
     constructor() {
@@ -24,6 +25,10 @@ contract Lottery {
         returns (address payable)
     {
         return lotteryHistory[lotteryId_];
+    }
+
+    function getRandomResult() public view returns (uint256) {
+        return randomResult;
     }
 
     function getBalance() public view returns (uint256) {
@@ -45,7 +50,12 @@ contract Lottery {
     }
 
     function pickWinner() public onlyOwner {
-        uint256 index = getRandomNumber() % players.length;
+        randomResult = getRandomNumber();
+    }
+
+    function payWinner() public onlyOwner {
+        require(randomResult > 0, "Must pick winner first.");
+        uint256 index = randomResult % players.length;
         players[index].transfer(address(this).balance);
 
         lotteryHistory[lotteryId] = players[index];
@@ -53,6 +63,7 @@ contract Lottery {
 
         // reset the state of the contract
         players = new address payable[](0);
+        randomResult = 0;
     }
 
     modifier onlyOwner() {
