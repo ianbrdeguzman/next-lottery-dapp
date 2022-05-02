@@ -10,3 +10,7 @@
 .buttons {
   padding: 2rem 0;
 }
+
+.historyItem {
+  list-style: none;
+}
